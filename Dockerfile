@@ -12,6 +12,5 @@ RUN pip install -e .
 WORKDIR /apps
 
 COPY ./apps .
-RUN chmod +x screenshot.sh
 
 CMD ["ash"]

@@ -4,8 +4,9 @@ import openttd.admin
 import openttd.packet
 import logging
 import sys
+import datetime
 
-async def main(hostname, port, password, type):
+async def main(hostname, port, password, map_types):
     logger = logging.getLogger(__name__ + '.main')
     client = openttd.admin.Client()
     client.on_error = logger.error
@@ -26,20 +27,20 @@ async def main(hostname, port, password, type):
 
     logger.info("Connected to server: %s", client.server_info.name)
 
-    sys_date = await client.rcon_command(f'getsysdate')
-    sys_date = [d for _, d in sys_date][0]
+    sys_date = datetime.datetime.now().isoformat(timespec='seconds')
+
     game_date = await client.rcon_command(f'getdate')
     game_date = [d for _, d in game_date][0]
+    game_date = game_date.split(':')[1].strip()
 
-    sys_date, game_date = [d.split(':')[1].strip() for d in [sys_date, game_date]]
-
-    allowed_types = ['minimap', 'topography', 'industry']
-    if type not in allowed_types:
-        print(f'invalid type: {type}')
-        return
-
-    filename = f'screenshot_{type}_{sys_date}_{game_date}'
-    await client.rcon_command(f'screenshot {type} "{filename}"')
+    allowed_map_types = ['minimap', 'topography', 'industry']
+    map_types = map_types.split(',')
+    for map_type in map_types:
+        if map_type not in allowed_map_types:
+            print(f'invalid type: {map_type}')
+            return
+        filename = f'screenshot_{sys_date}_{game_date}_{map_type}'
+        await client.rcon_command(f'screenshot {map_type} "{filename}"')
 
     await client.disconnect()
 

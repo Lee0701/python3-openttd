@@ -7,7 +7,7 @@ services:
     command: tail -f /dev/null
     labels:
       ofelia.enabled: "true"
-      ofelia.job-exec.screenshot.schedule: "@every 10s"
+      ofelia.job-exec.screenshot.schedule: "$schedule"
       ofelia.job-exec.screenshot.command: "python /apps/screenshot.py $rcon_addr $rcon_port $rcon_pass $map_type"
   ofelia:
     image: mcuadros/ofelia:latest
@@ -16,6 +16,3 @@ services:
     command: daemon --docker
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    labels:
-      ofelia.job-local.schedule.schedule: "@every 5s"
-      ofelia.job-local.schedule.command: "date"
