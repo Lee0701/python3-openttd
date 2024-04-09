@@ -4,7 +4,6 @@ import openttd.admin
 import openttd.packet
 import logging
 import sys
-import datetime
 
 async def main(hostname, port, password, type):
     logger = logging.getLogger(__name__ + '.main')
@@ -33,8 +32,6 @@ async def main(hostname, port, password, type):
     game_date = [d for _, d in game_date][0]
 
     sys_date, game_date = [d.split(':')[1].strip() for d in [sys_date, game_date]]
-    
-    # print(f'system date: {sys_date}, game date: {game_date}')
 
     allowed_types = ['minimap', 'topography', 'industry']
     if type not in allowed_types:
