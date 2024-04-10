@@ -31,6 +31,9 @@ def handle_client_info(info):
 def handle_company_info(info):
     print(info)
 
+def handle_gamescript_info(info):
+    print(info)
+
 @asyncio.coroutine
 def main(loop, hostname, port, password):
     client = openttd.admin.Client(loop=loop)

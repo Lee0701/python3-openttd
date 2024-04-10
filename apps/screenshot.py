@@ -1,31 +1,11 @@
 
 import asyncio
-import openttd.admin
-import openttd.packet
-import logging
 import sys
 import datetime
+import bot
 
-async def main(hostname, port, password, map_types):
-    logger = logging.getLogger(__name__ + '.main')
-    client = openttd.admin.Client()
-    client.on_error = logger.error
-    try:
-        await client.connect_tcp(hostname, port)
-    except OSError as err:
-        print("failed to connect:", err, file=sys.stderr)
-        return
-
-    try:
-        await client.authenticate(
-            password,
-            "cameraman",
-            "devel")
-    except:
-        logger.exception("during authentication: ")
-        return
-
-    logger.info("Connected to server: %s", client.server_info.name)
+async def launch(client, args):
+    [map_types] = args
 
     sys_date = datetime.datetime.now().isoformat(timespec='seconds')
 
@@ -42,7 +22,11 @@ async def main(hostname, port, password, map_types):
         filename = f'screenshot_{sys_date}_{game_date}_{map_type}'
         await client.rcon_command(f'screenshot {map_type} "{filename}"')
 
-    await client.disconnect()
+async def main(hostname, port, password, map_types):
+    client = await bot.connect(hostname, port, password)
+    args = [map_types]
+    await launch(client, args)
+    await bot.disconnect(client)
 
 if __name__ == "__main__":
     [hostname, port, password, type] = sys.argv[1:]
