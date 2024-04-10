@@ -405,9 +405,7 @@ class Client:
         dependencies.update(packet_types)
 
     def _recv_chat(self, pkt):
-        chat_message = info.ChatMessage()
-        chat_message.read_from_packet(pkt)
-        return chat_message
+        return info.ChatMessage.read_from_packet(pkt)
 
     def _recv_client_error(self, pkt):
         return info.ClientError(pkt.unpack_uint32(), pkt.unpack_uint8())
