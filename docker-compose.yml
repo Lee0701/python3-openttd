@@ -1,6 +1,11 @@
 services:
+  discord:
+    image: python3-openttd
+    build: .
+    command: python /apps/discord_chat.py $rcon_addr $rcon_port $rcon_pass $discord_token $discord_channel
+    restart: always
   screenshot:
-    image: python3-openttd-screenshot
+    image: python3-openttd
     build: .
     volumes:
     - ./screenshot:/apps/data/screenshot/
