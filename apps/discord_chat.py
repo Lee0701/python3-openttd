@@ -16,11 +16,15 @@ async def launch(ttd_client, args):
         print(message)
 
     async def broadcast_to_discord(source, author, text):
+        if text == '':
+            return
         content = f'[{source}] {author}: {text}'
         log_message(content)
         await discord_client.get_channel(int(channel_id)).send(content)
 
     async def broadcast_to_ttd(source, author, text):
+        if text == '':
+            return
         content = f'[{source}] {author}: {text}'
         log_message(content)
         await ttd_client.rcon_command(f'say "{content}"')
@@ -35,6 +39,8 @@ async def launch(ttd_client, args):
 
     async def handle_discord_chat(message):
         if message.author == discord_client.user:
+            return
+        if message.channel.id!= int(channel_id):
             return
         await broadcast_to_ttd('Discord', message.author.display_name, message.content)
 
